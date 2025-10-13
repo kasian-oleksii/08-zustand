@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote } from '../../lib/api';
 
 interface NoteFormProps {
-  onCloseModal: () => void;
+  onCloseModal?: () => void;
 }
 
 interface FormValues {
@@ -28,14 +28,13 @@ const NoteSchema = Yup.object().shape({
 
 export default function NoteForm({ onCloseModal }: NoteFormProps) {
   const idUse = useId();
-
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (noteData: NewNote) => createNote(noteData),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
-      onCloseModal();
+      onCloseModal?.(); // виклик лише якщо проп переданий
     },
   });
 
@@ -62,7 +61,7 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
             name="title"
             className={css.input}
           />
-          {<ErrorMessage name="title" component="span" className={css.error} />}
+          <ErrorMessage name="title" component="span" className={css.error} />
         </div>
 
         <div className={css.formGroup}>
@@ -74,13 +73,7 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
             rows={8}
             className={css.textarea}
           />
-          {
-            <ErrorMessage
-              name="content"
-              component="span"
-              className={css.error}
-            />
-          }
+          <ErrorMessage name="content" component="span" className={css.error} />
         </div>
 
         <div className={css.formGroup}>
@@ -97,17 +90,19 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
             <option value="Meeting">Meeting</option>
             <option value="Shopping">Shopping</option>
           </Field>
-          {<ErrorMessage name="tag" component="span" className={css.error} />}
+          <ErrorMessage name="tag" component="span" className={css.error} />
         </div>
 
         <div className={css.actions}>
-          <button
-            type="button"
-            className={css.cancelButton}
-            onClick={onCloseModal}
-          >
-            Cancel
-          </button>
+          {onCloseModal && (
+            <button
+              type="button"
+              className={css.cancelButton}
+              onClick={onCloseModal}
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
             className={css.submitButton}

@@ -7,16 +7,19 @@ import css from './NotesPage.module.css';
 import { fetchNotes } from '@/lib/api';
 import NoteList from '@/components/NoteList/NoteList';
 import SearchBox from '@/components/SearchBox/SearchBox';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import Pagination from '@/components/Pagination/Pagination';
+import { FetchNoteList } from '@/types/note';
+import Link from 'next/link';
 
 type NotesClientProps = {
+  initialData: FetchNoteList;
   initialTag?: string;
 };
 
-export default function NotesClient({ initialTag }: NotesClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export default function NotesClient({
+  initialData,
+  initialTag,
+}: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputValue, setInputValue] = useState('');
   const [debouncedValue, setDebouncedValue] = useState('');
@@ -35,6 +38,7 @@ export default function NotesClient({ initialTag }: NotesClientProps) {
     queryKey: ['notes', currentPage, debouncedValue, initialTag],
     queryFn: () => fetchNotes(currentPage, debouncedValue, initialTag),
     placeholderData: keepPreviousData,
+    initialData,
   });
 
   const totalPages = data?.totalPages ?? 0;
@@ -51,21 +55,14 @@ export default function NotesClient({ initialTag }: NotesClientProps) {
             totalPages={totalPages}
           />
         )}
-
-        <button className={css.button} onClick={() => setIsModalOpen(true)}>
-          Create note +
-        </button>
+        <Link href="/notes/action/create" className={css.button}>
+          Note +
+        </Link>
       </header>
 
       {isLoading && <p className={css.loading}>loading notes...</p>}
       {isError && <p className={css.error}>Server error. Sorry!</p>}
       {data && !isLoading && <NoteList notes={data.notes} />}
-
-      {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm onCloseModal={() => setIsModalOpen(false)} />
-        </Modal>
-      )}
     </div>
   );
 }

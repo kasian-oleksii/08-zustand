@@ -12,14 +12,12 @@ const Footer = () => {
               href="https://www.linkedin.com/in/volodymyr-vasyliev-dev/"
               target="_blank"
             >
-              Volodymyr Vasyliev
+              Oleksii Kasian
             </a>{' '}
           </p>
           <p>
             Contact us:{' '}
-            <a href="mailto:vasyliev.official@gmail.com">
-              vasyliev.official@gmail.com
-            </a>
+            <a href="kasianalex1@gmail.com">kasianalex1@gmail.com</a>
           </p>
         </div>
       </div>
