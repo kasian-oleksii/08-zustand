@@ -1,6 +1,5 @@
-import { fetchNotes } from '@/lib/api';
-import NotesClient from './Notes.client';
 import { Metadata } from 'next';
+import NotesClient from './Notes.client';
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -30,13 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NotesPage({ params }: Props) {
   const { slug } = await params;
-  console.log('slug', slug);
-
-  const initialPage = 1;
-  const initialQuery = '';
   const initialTag = slug[0] === 'all' ? undefined : slug[0];
 
-  const initialData = await fetchNotes(initialPage, initialQuery, initialTag);
-
-  return <NotesClient initialData={initialData} initialTag={initialTag} />;
+  return <NotesClient tag={initialTag} />;
 }
