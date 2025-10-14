@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NotesPage({ params }: Props) {
   const { slug } = await params;
-  const initialTag = slug[0] === 'all' ? undefined : slug[0];
+  const tag = slug[0] === 'all' ? undefined : slug[0];
 
-  return <NotesClient tag={initialTag} />;
+  return <NotesClient tag={tag} />;
 }
