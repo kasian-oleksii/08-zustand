@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { NewNote } from '@/types/note';
 import { persist } from 'zustand/middleware';
+import type { NewNote } from '@/types/note';
 
 type NoteDraftStore = {
   draft: NewNote;
@@ -18,9 +18,12 @@ export const useNoteDraftStore = create<NoteDraftStore>()(
   persist(
     (set) => ({
       draft: initialDraft,
-      setDraft: (note: NewNote) => set(() => ({ draft: note })),
-      clearDraft: () => set(() => ({ draft: initialDraft })),
+      setDraft: (note: NewNote) => set({ draft: note }),
+      clearDraft: () => set({ draft: initialDraft }),
     }),
-    { name: 'note-draft', partialize: (state) => ({ draft: state.draft }) },
+    {
+      name: 'note-draft',
+      partialize: (state) => ({ draft: state.draft }),
+    },
   ),
 );

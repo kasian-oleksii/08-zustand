@@ -22,4 +22,28 @@
   color: #444444;
   line-height: 28px;
   margin-bottom: 16px;
+  text-align: center;
+}
+
+.button_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.button {
+  padding: 12px 24px;
+  margin-bottom: 24px;
+  background-color: #444444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+
+  transition: background-color 0.3s ease;
+}
+.button:hover {
+  background-color: #333333;
 }
