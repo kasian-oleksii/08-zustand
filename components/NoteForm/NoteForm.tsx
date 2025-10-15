@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote } from '@/lib/api';
 import { type NewNote } from '@/types/note';
 import { useNoteDraftStore } from '@/lib/store/noteStore';
+import { useRouter } from 'next/navigation';
 
 interface NoteFormProps {
   onCloseModal?: () => void;
@@ -31,6 +32,7 @@ const NoteSchema = Yup.object().shape({
 export default function NoteForm({ onCloseModal }: NoteFormProps) {
   const idUse = useId();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
@@ -39,7 +41,11 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       clearDraft();
-      onCloseModal?.();
+      if (onCloseModal) {
+        onCloseModal();
+      } else {
+        router.back();
+      }
     },
   });
 
@@ -49,6 +55,14 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
   ) => {
     formikHelper.resetForm();
     mutate(values);
+  };
+
+  const handleCancel = () => {
+    if (onCloseModal) {
+      onCloseModal();
+    } else {
+      router.back();
+    }
   };
 
   const initialValues: FormValues = {
@@ -129,15 +143,13 @@ export default function NoteForm({ onCloseModal }: NoteFormProps) {
           </div>
 
           <div className={css.actions}>
-            {onCloseModal && (
-              <button
-                type="button"
-                className={css.cancelButton}
-                onClick={onCloseModal}
-              >
-                Cancel
-              </button>
-            )}
+            <button
+              type="button"
+              className={css.cancelButton}
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               className={css.submitButton}
