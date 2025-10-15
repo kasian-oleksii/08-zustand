@@ -9,7 +9,7 @@ const Footer = () => {
           <p>
             Developer:{' '}
             <a
-              href="https://www.linkedin.com/in/volodymyr-vasyliev-dev/"
+              href="https://www.linkedin.com/in/oleksii-kasian-dev/"
               target="_blank"
             >
               Oleksii Kasian
